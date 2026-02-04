@@ -17,11 +17,12 @@ const mailSender = async (email, subject, body) => {
       html: `${body}`
     })
 
-    console.log(info)
+    console.log('Email sent successfully:', info.messageId)
     return info;
   }
   catch (err) {
-    console.log(`Error sending email: ${err.message}`)
+    console.error(`Error sending email: ${err.message}`)
+    throw err; // Re-throw the error so caller knows it failed
   }
 }
 
