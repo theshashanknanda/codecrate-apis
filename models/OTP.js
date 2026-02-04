@@ -2,23 +2,23 @@ const mongoose = require("mongoose");
 const mailSender = require("../utils/mailSender");
 
 const OTPSchema = new mongoose.Schema({
-    email:{
-        type:String,
+    email: {
+        type: String,
         required: true,
     },
     otp: {
-        type:String,
-        required:true,
+        type: String,
+        required: true,
     },
     createdAt: {
-        type:Date,
-        default:Date.now,
-        expires: 10*60,
+        type: Date,
+        default: Date.now,
+        expires: 10 * 60,
     }
 });
 
-OTPSchema.pre("save", async function(next) {
-    mailSender(this.email, "Verification email for Study Notion", `<!DOCTYPE html>
+OTPSchema.pre("save", async function (next) {
+    await mailSender(this.email, "Verification email for Study Notion", `<!DOCTYPE html>
         <html>
         <head>
         <meta charset="UTF-8">
