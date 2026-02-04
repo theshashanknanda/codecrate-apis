@@ -213,7 +213,7 @@ exports.signup = async (req, res, next) => {
             return res
             .status(401)
             .json({
-                success: true,
+                success: false,
                 message: "OTP either not sent or expired. Please try again with a new OTP",
             })
         }

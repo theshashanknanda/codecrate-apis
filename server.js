@@ -21,25 +21,29 @@ app.use(fileupload({
 
 // start server
 const PORT = process.env.PORT || 3001
-app.listen(PORT, () => {
-    console.log(`server started at ${PORT}`)
-})
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`server started at ${PORT}`)
+    })
+}
+
+module.exports = app;
 
 // connecting database
-const {connect} = require('./config/database')
+const { connect } = require('./config/database')
 connect()
 
 // setup cloudinary
-const {cloudinaryConfig} = require('./config/cloudinary')
+const { cloudinaryConfig } = require('./config/cloudinary')
 
 // index route
 app.get('/', (req, res) => {
     return res
-    .status(200)
-    .json({
-        success: true,
-        message: 'index route',
-    })
+        .status(200)
+        .json({
+            success: true,
+            message: 'index route',
+        })
 
 })
 
@@ -76,11 +80,11 @@ app.use(BASE_ROUTE_V1, cartItemRoutes)
 // 404 not found
 app.use((req, res, next) => {
     return res
-    .status(404)
-    .json({
-        success: false,
-        message: 'Route not found',
-    })
+        .status(404)
+        .json({
+            success: false,
+            message: 'Route not found',
+        })
 })
 
 // error handler

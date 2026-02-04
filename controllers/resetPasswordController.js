@@ -41,7 +41,7 @@ exports.sendPasswordResetToken = async (req, res, next) => {
             if(updatedUser){
                 console.log(updatedUser)
 
-                const url = `http://localhost:3000/resetPassword/${randomUID}`
+                const url = `https://codecrate.co/resetPassword/${randomUID}`
                 await mailSender(email, "Reset password link", `
                     <!DOCTYPE html>
 <html>
@@ -60,7 +60,8 @@ exports.sendPasswordResetToken = async (req, res, next) => {
       </a>
 
       <p style="color: #888888; font-size: 14px; margin: 30px 0 10px 0;">
-        If you didn’t request this, you can safely ignore this email.
+        If the Button above does not work, copy and paste the following link into your browser:
+        ${url}
       </p>
 
       <p style="color: #444444; font-size: 16px;">Thanks,<br />The Support Team</p>
