@@ -8,6 +8,7 @@ const { default: mongoose } = require('mongoose');
 
 const Cart = require('../models/Cart');
 const axios = require('axios');
+const vm = require('vm');
 
 exports.createCourse = async (req, res, next) => {
   try {
@@ -435,27 +436,28 @@ exports.addCompletedLecture = async (req, res, next) => {
 
 exports.codeRunnerController = async (req, res) => {
   try {
-    const code = req.body.code;
-    if (typeof code !== 'string') {
-      return res.status(400).json({ error: 'Code must be a string' });
-    }
+    // LEGACY PISTON API----
+    // const code = req.body.code;
+    // if (typeof code !== 'string') {
+    //   return res.status(400).json({ error: 'Code must be a string' });
+    // }
 
-    // Use Piston API to execute code
-    const response = await axios.post('https://emkc.org/api/v2/piston/execute', {
-      language: 'javascript',
-      version: '*',
-      files: [
-        {
-          content: code,
-        },
-      ],
-    });
+    // // Use Piston API to execute code
+    // const response = await axios.post('https://emkc.org/api/v2/piston/execute', {
+    //   language: 'javascript',
+    //   version: '*',
+    //   files: [
+    //     {
+    //       content: code,
+    //     },
+    //   ],
+    // });
 
-    const output = response.data.run.output;
+    // const output = response.data.run.output;
 
-    return res.json({
-      output,
-    });
+    // return res.json({
+    //   output,
+    // });
 
     /**
      * Legacy Docker Implementation
@@ -487,6 +489,22 @@ exports.codeRunnerController = async (req, res) => {
      * //   output,
      * // })
      */
+
+    const { code } = req.body;
+      let output = '';
+
+      const sandbox = {
+        console: {
+          log: (...args) => { output += args.join(' ') + '\n'; }
+        }
+      };
+
+      try {
+        vm.runInNewContext(code, sandbox, { timeout: 5000 });
+        res.json({ output });
+      } catch (error) {
+        res.json({ output: error.message });
+      }
   } catch (e) {
     console.log(e.message);
     return res.status(500).json({
