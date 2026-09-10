@@ -77,6 +77,8 @@ app.use(BASE_ROUTE_V1, ratingandreviewRoutes)
 const cartItemRoutes = require('./routes/cartItemRoutes')
 app.use(BASE_ROUTE_V1, cartItemRoutes)
 
+console.log('URI:', process.env.MONGODB_URI);
+
 // 404 not found
 app.use((req, res, next) => {
     return res
