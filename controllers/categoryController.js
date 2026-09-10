@@ -70,6 +70,7 @@ exports.showAllCategoryCourses = async (req, res, next) => {
 
 exports.getAllCategories = async (req, res, next) => {
     try{
+            
         const categories = await Category.find({})
 
         return res
